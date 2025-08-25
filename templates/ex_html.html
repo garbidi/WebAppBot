@@ -2,17 +2,50 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой первый WebApp</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <h2>Привет из WebApp!</h2>
-    <button onclick="sendData()">Отправить данные боту</button>
+    <div style="padding: 20px; text-align: center;">
+        <h2>Привет из WebApp!</h2>
+        <p>Нажмите кнопку ниже чтобы отправить данные</p>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+        <button onclick="sendData()" style="padding: 10px 20px; font-size: 16px;">
+            📨 Отправить данные боту
+        </button>
+    </div>
+
     <script>
+        // Инициализация Telegram WebApp
+        let tg = window.Telegram.WebApp;
+
+        // Инициализируем основную кнопку
+        tg.MainButton.setText("Отправить данные");
+        tg.MainButton.show();
+
+        // Функция отправки данных
         function sendData() {
-            Telegram.WebApp.sendData("Привет, бот!");
+            const data = {
+                message: "Привет, бот!",
+                user_action: "button_click",
+                timestamp: new Date().toISOString()
+            };
+
+            // Отправляем данные в формате JSON строки
+            tg.sendData(JSON.stringify(data));
+
+            // Закрываем WebApp после отправки
+            tg.close();
         }
+
+        // Вешаем обработчик на основную кнопку
+        tg.MainButton.onClick(sendData);
+
+        // Сообщаем Telegram что WebApp готов
+        tg.ready();
+
+        console.log("WebApp инициализирован");
     </script>
 </body>
 </html>
